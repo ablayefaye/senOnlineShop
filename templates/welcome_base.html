@@ -1,0 +1,128 @@
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SenBoutique | {% block title %}{% endblock title %}
+    </title>
+    <!-- insertion de css bootstrap -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/all.css' %}">
+
+    <style>
+        .shop {
+            background-image: url("/static/images/img_shop.jpg");
+            /* The image used */
+            background-color: #cccccc;
+            /* Used if the image is unavailable */
+            height: 500px;
+            /* You must set a specified height */
+            background-position: center;
+            /* Center the image */
+            background-repeat: no-repeat;
+            /* Do not repeat the image */
+            background-size: cover;
+            /* Resize the background image to cover the entire container */
+        }
+
+        .article {
+            background-image: url("/static/images/bodyAdmin.jpg");
+            /* The image used */
+            background-color: #cccccc;
+            /* Used if the image is unavailable */
+            height: auto;
+            /* You must set a specified height */
+            background-position: center;
+            /* Center the image */
+            background-repeat: no-repeat;
+            /* Do not repeat the image */
+            background-size: cover;
+            /* Resize the background image to cover the entire container */
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info">
+        <div class="container-fluid p-2">
+            <a class="navbar-brand" href="{% url 'welcome' %}"><strong>SenBoutique</strong></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse text-uppercase" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link
+                    {% if page == 'welcome_articles' %}
+                        active
+                    {% endif %}
+                    " aria-current="page" href="{% url 'welcome_articles' %}">nos articles</a>
+                    <a class="nav-link                  
+                    " aria-current="page" href="">contact</a>
+                    <a class="nav-link" aria-current="page" href="">à propos</a>
+                </div>
+
+                <div class="navbar-nav ml-auto">
+                    {% if user %}
+                    <a class="nav-link" href="{% url 'homeManager' %}">
+                        <i class="fa fa-home"></i> Mon espace d'administration
+                    </a>
+
+                    {% else %}
+
+                    <a class="nav-link" href="" data-toggle="modal" data-target="#login">
+                        Se connecter
+                    </a>
+
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </nav>
+    {% block container %}
+
+    {% endblock container %}
+    <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <div class="modal fade" id="login" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-warning text-white">
+                        <h5 class="modal-title" id="exampleModalLabel"> 
+                           Authentification
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            <label for="email">Mail:</label>
+                            <input type="email" name="email" placeholder="Votre adresse mail *" class="form-control">
+                        </p>
+                        <p>
+                            <label for="password">Mot de passe:</label>
+                            <input type="password" name="password" placeholder="votre mot de passe *" class="form-control">
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                        <button class="btn btn-info" type="submit">Se connecter</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <footer class="p-3 bg-dark text-white mt-2 text-center">
+        SenBoutique
+    </footer>
+    <!-- insertion de js bootstrap -->
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'fonts/js/all.js' %}"></script>
+</body>
+
+</html>

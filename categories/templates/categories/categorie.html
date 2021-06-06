@@ -1,0 +1,267 @@
+{% extends 'manager_base.html' %}
+
+
+{% block title %}
+    catégories
+{% endblock title %}
+
+
+{% block container %}
+    <div class="container mt-3">
+        <h2 class="font-italic" style="text-shadow: 2px 1px 1px #000;">Liste catégoris</h2>
+        <hr>
+        <div class="text-right">
+            <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addcategory">
+                <i class="fa fa-plus"></i> ajouter catégori
+            </button>
+        </div>
+        
+        {% if messages %}
+            
+            {% for message in messages  %}
+                <div class="alert mt-1 alert-info">
+                    {{message}}
+                </div>
+            {% endfor %}
+                
+        {% endif %}
+            
+        <form action="{% url 'addCategory' %}" method="post">
+            {% csrf_token %}
+            <div class="modal fade" id="addcategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-dark text-white">
+                            <h5 class="modal-title" id="exampleModalLabel">Enregistrer catégori</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" name="user" value="{{user.id}}">
+                            <p>
+                                <label for="name">Nom catégori:</label>
+                                <input type="text" required name="name" class="form-control" placeholder="Nom catégori *">
+                            </p>
+                            <p>
+                                <label for="description">Description catégori:</label>
+                                <textarea id="description" required cols="10" rows="5" name="description" class="form-control" placeholder="Description catégori *"></textarea>
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-info">Enregistrer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        {% if categories %}
+            {% for category in categories %}
+            <div class="jumbotron pt-1 pl-2 pb-1 bg-light mt-2">
+                <h6 class='text-uppercase font-italic text-info'><strong>#{{category.id}}</strong> {{category.name}}</h6>
+                <p>{{category.description}}</p>
+                Date création : <strong>{{category.created_at}}</strong>
+                <hr>
+                <p class="text-right">
+                    <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#edit{{category.id}}"><i class="fa fa-edit"></i></button>
+                    <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#trash{{category.id}}"><i class="fa fa-trash"></i></button>
+                    <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#articles{{category.id}}"><i class="fa fa-eye"></i> articles</button>
+                    <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#addArticle{{category.id}}"><i class="fa fa-plus"></i> article</button>
+                </p>
+                <!-- modifier catégori -->
+                <form action="{% url 'editCategory' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal fade" id="edit{{category.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-dark text-white">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modifier catégorie <strong class="text-info">{{category.name}}</strong></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" name="id" value="{{category.id}}">
+                                    <p>
+                                        <label for="name">Nom catégori:</label>
+                                        <input required type="text" name="name" id="name" required value="{{category.name}}" placeholder="nom catégori *" class="form-control">
+                                    </p>
+                                    <p>
+                                        <label for="description">Description:</label>
+                                        <textarea required name="description" id="description" placeholder="Description catégori *" cols="10" rows="5" class="form-control text-left">
+                                            {{category.description}}
+                                        </textarea>
+                                    </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                    <button type="submit" class="btn btn-info">modifier</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- voir liste articles catégori -->
+                <div class="modal fade" id="articles{{category.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header bg-dark text-white">
+                                <h5 class="modal-title" id="exampleModalLabel">Liste articles du catégori <strong class="text-info">{{category.name}}</strong></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    {% for article in articles %}
+                                    
+                                    {% if article.category.id == category.id %}
+                                        
+                                    <div class="col-sm-6 mt-1">
+                                        <div class="card">
+                                            <div class="card-header"> <small>{{article.name}},</small>
+                                                {% if article.old_price %}
+                                                ancien prix: <strike class="text-danger">{{article.old_price}} Francs</strike>
+                                                &&
+                                                {% endif %}
+                                                prix actuel: <span class="text-info">{{article.price}} Francs</span>
+                                            </div>
+                                            <div class="card-body">
+                                                <img src="{{article.image.url}}" class="img-fluid">
+                                            </div>
+                                            <div class="card-footer text-center">
+                            
+                                                Nombre exemplaires: <span class="text-info">{{article.number_of_exemplaire}}</span>
+                                                <br>
+                                                Téléphone: <span class="text-info">{{article.user.tel}}</span>
+                                                <hr>
+                                                <button class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
+                                                <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#trash{{article.id}}"><i
+                                                        class="fa fa-trash"></i></button>
+                                                
+                                                {% if article.description %}                                                
+                                                <button class="btn-default btn btn-sm" data-toggle="modal" data-target="#desc{{article.id}}"><i class="fa fa-eye"></i> description</button>
+                                                {% endif %}
+                            
+                                            </div>
+                                            <!-- supprimer article -->
+                                            <div class="modal fade" id="trash{{article.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-dark text-white">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Suppression article ...</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Etes-vous sûre de vouloir supprimer cet article ?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Non,
+                                                                annuler</button>
+                                                            <a href="/manager/deleteArticle/{{article.id}}" class="btn btn-danger btn-sm">Oui, je
+                                                                suis sûre</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- afficher description article -->
+                                            <div class="modal fade" id="desc{{article.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-dark text-white">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Description article {{article.name}}</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body text-left">
+                                                            {{article.description}}
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">fermer</button>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                        
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- supprimer catégori -->
+                <div class="modal fade" id="trash{{category.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-dark text-white">
+                                <h5 class="modal-title" id="exampleModalLabel">suppression catégorie <strong class="text-info">{{category.name}}</strong></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Etes-vous sûre de vouloir supprimer ce catégori ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non, annuler</button>
+                                <a href="/categories/deleteCategory/{{category.id}}" class="btn btn-info">Oui, je suis sûre</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ajouter article à catégori -->
+                <form action="{% url 'saveArticleInCategory' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal fade" id="addArticle{{category.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-dark text-white">
+                                    <h5 class="modal-title" id="exampleModalLabel">Ajouter article sur catégori <strong class="text-info">{{category.name}}</strong></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" name="category" value="{{category.id}}">
+                                    {{form.as_p}}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                    <button type="submit" class="btn btn-info">Ajouter</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {% endfor %}
+            <div class="alert alert-dark mt-2">
+                <strong>{{categories|length}} catégori{{categories|pluralize:'s'}} d'article</strong>
+            </div>
+                
+        {% else %}
+            <div class="alert alert-dark">
+                Liste catégorie vide
+            </div>
+        {% endif %}
+            
+    </div>
+{% endblock container %}
+    
+    

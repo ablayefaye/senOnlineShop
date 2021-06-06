@@ -1,0 +1,112 @@
+{% extends 'welcome_base.html' %}
+
+
+{% block title %}
+nos articles
+{% endblock title %}
+
+{% block container %}
+<div class="article container-fluid">
+    <div class="container">
+        <h2 class="font-italic" style="text-shadow: 2px 1px 1px #000;">Nos articles</h2>
+        <hr>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-info">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Liste catégorie
+                            {% if category %}
+                            (<strong class="text-warning">{{category}}</strong>)
+                            {% endif %}
+
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="?category=all">Tout les catégoris</a>
+                            {% for category in categories %}
+                            <a class="dropdown-item" href="?category={{category}}">catégori {{category}}</a>
+                            {% endfor %}
+
+                        </div>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </nav>
+        {% if articles %}
+        <div class="container mb-3 mt-3">
+
+            <div class="row">
+                {% for article in articles %}
+                <div class="col-sm-4 mt-2">
+                    <div class="card">
+                        <div class="card-header"> <small> <strong>#{{article.id}}</strong> {{article.name}},</small>
+                            {% if article.old_price %}
+                            ancien prix: <strike class="text-danger">{{article.old_price}} Francs</strike>
+                            &&
+                            {% endif %}
+                            prix actuel: <span class="text-info">{{article.price}} Francs</span>
+                        </div>
+                        <div class="card-body">
+                            <img src="{{article.image.url}}" class="img-fluid">
+                        </div>
+                        <div class="card-footer text-center">
+
+                            Nombre exemplaires: <span class="text-info">{{article.number_of_exemplaire}}</span>
+                            <br>
+                            Téléphone: <span class="text-info">{{article.user.tel}}</span>                           
+                            <br>
+                            
+                            {% if article.description %}
+                                <button class="btn btn-warning" data-toggle="modal" data-target="#show{{article.id}}"><i class="fa fa-eye"></i> description</button>
+                            {% endif %}
+                                
+                        </div>
+                        <div class="modal fade" id="show{{article.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-warning text-white">
+                                        <h5 class="modal-title" id="exampleModalLabel">Description article <span class="text-info">{{article.name}}</span></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{article.description}}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="alert alert-warning mt-2"">
+                <strong>{{articles|length}} article{{articles|pluralize:'s'}}</strong>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert container alert-warning">Liste articles
+            {% if category %}
+            de catégori <strong class="text-info">{{category}}</strong>
+            {% endif %}
+            vide !</div>
+        {% endif %}
+        <br>
+        <br>
+    </div>
+</div>
+{% endblock container %}
