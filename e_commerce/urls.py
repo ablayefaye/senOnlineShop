@@ -17,7 +17,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-
+from welcome.views import welcome 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +26,7 @@ urlpatterns = [
     path('welcome/', include('welcome.urls')), # accueil site
     path('articles/', include('articles.urls')), # gestion des articles
     path('categories/', include('categories.urls')), # gestion des articles
+    path('', welcome, name='welcome')
 ]
 
 if settings.DEBUG:
