@@ -9,7 +9,7 @@
 {% block container %}
 <div class="shop container-fluid mt-5">
     <div class="pt-3 text-center">
-        <span style="font-size: 3em; text-shadow: 8px 3px 3px #000;font-weight: bold;" class="text-white font-italic">SenOnlineShop</span>
+        <span style="font-size: 2.8em; text-shadow: 8px 3px 3px #000;font-weight: bold;" class="text-white font-italic">SenOnlineShop</span>
         <p style="font-size: 1.6em; text-shadow: 8px 3px 3px #000;font-weight: bold;" class="text-white font-italic">
             La boutique la plus proche de chez vous <span class="fa text-warning fa-smile"></span>
         </p>
@@ -35,6 +35,9 @@
                 <!-- The slideshow -->
                 <div class="carousel-inner">
 
+                    
+                    {% if articles %}
+                        
                     {% for article in articles %}
 
                     {% if forloop.counter == 1 %}
@@ -73,6 +76,8 @@
                     {% endif %}
 
                     {% endfor %}
+                    {% endif %}
+                        
 
 
                 </div>
@@ -88,6 +93,7 @@
             </div>
         </div>
     </div>
+    <br><br>
 </div>
 {% endblock container %}
     

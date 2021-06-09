@@ -75,7 +75,7 @@ def users(request):
         if request.method == 'POST':
             if 'lookUser' in request.POST:
                 lookUser = request.POST['lookUser']
-                users = User.objects.filter(email=lookUser, trash=False)
+                users = User.objects.filter(email__startswith=lookUser, trash=False)
                 resultSearsh = 'resultat recherche: '+lookUser
 
         articles = Article.objects.all()
