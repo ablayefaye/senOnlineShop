@@ -7,3 +7,5 @@ from database.models import *
 admin.site.register(User)
 admin.site.register(Article)
 admin.site.register(Category)
+admin.site.register(Forfait)
+admin.site.register(TypeForfait)

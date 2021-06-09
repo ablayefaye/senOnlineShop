@@ -1,0 +1,136 @@
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SenOnlineShop | {% block title %}{% endblock title %}
+    </title>
+    <!-- insertion de css bootstrap -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <style>
+        .shop {
+        background-image: url("/static/images/img_shop.jpg"); /* The image used */
+        background-color: #cccccc; /* Used if the image is unavailable */
+        height: 500px; /* You must set a specified height */
+        background-position: center; /* Center the image */
+        background-repeat: no-repeat; /* Do not repeat the image */
+        background-size: cover; /* Resize the background image to cover the entire container */
+        }
+
+        .bg_app {
+        background-image: url("/static/images/bodyAdmin.jpg"); /* The image used */
+        background-color: #cccccc; /* Used if the image is unavailable */
+        height: auto; /* You must set a specified height */
+        background-position: center; /* Center the image */
+        background-repeat: no-repeat; /* Do not repeat the image */
+        background-size: cover; /* Resize the background image to cover the entire container */
+        } 
+
+        .bg_users{
+            background-image: url("/static/images/users.jpg"); /* The image used */
+        background-color: #cccccc; /* Used if the image is unavailable */
+        height: auto; /* You must set a specified height */
+        background-position: center; /* Center the image */
+        background-repeat: no-repeat; /* Do not repeat the image */
+        background-size: cover; /* Resize the background image to cover the entire container */
+        /* opacity: 0.2; */
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark p-1 bg-dark">
+        <a class="navbar-brand font-italic" href="{% url 'homeAdmin' %}" style="text-shadow: 1px 1px 1px white;"><strong>SenOnlineShop</strong></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto text-uppercase">
+                <li class="nav-item">
+                    <a class="nav-link
+                    {% if page == 'users' %}
+                        active
+                    {% endif %}
+                    " href="{% url 'users' %}"> <i class="fa fa-tools"></i> utilisateurs</a>
+                </li> 
+                <li class="nav-item">
+                    <a class="nav-link" href=""><i class="fa fa-tools"></i> articles</a>
+                </li>     
+                <li class="nav-item">
+                    <a class="nav-link" href=""> <i class="fa fa-tools"></i> catégoris</a>
+                </li>            
+                <li class="nav-item">
+                    <a class="nav-link" href=""><i class="fa fa-tools"></i> forfaits</a>
+                </li> 
+                <li class="nav-item">
+                    <a class="nav-link" href=""><i class="fa fa-tools"></i> signalements 
+                    {% if signalements %}
+                        <span class="bage bg-info p-1" style="border-radius: 2em;">{{signalements|length}}</span>
+                    {% endif %}
+                    </a>
+                </li> 
+                <li class="nav-item text-lowercase font-italic">
+                    <a class="nav-link" href="{% url 'welcome' %}"><i class="fa fa-eye"></i> voir le site</a>
+                </li>
+                
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{admin.firstname}} {{admin.lastname}}
+                        <img src="{{admin.image.url}}" class="img-fluid" alt="" srcset="">
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item mr-5" href="#">Mon profil</a>
+                        <a class="dropdown-item mr-5" href="" tn-default" data-toggle="modal"
+                        data-target="#disconnect">Se déconnecter</a>
+                    </div>
+                </li>
+                
+            </ul>
+            
+        </div>
+    </nav>
+    {% block container %}
+    
+    {% endblock container %}
+     <!-- confimation déconnection utilisateur -->
+     <div class="modal fade" id="disconnect" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Déconnection ...
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûre de vouloir vous déconnecter ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Non,
+                        annuler</button>
+                    <a href="{% url 'disconnect' %}" class="btn btn-sm btn-danger">Oui, je
+                        suis sûre</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="p-3 bg-dark text-white mt-2 text-center">
+        SenOnlineShop
+    </footer>
+    <!-- insertion de js bootstrap -->
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <!-- <script src="{% static 'fonts/js/all.js' %}"></script> -->
+</body>
+
+</html>

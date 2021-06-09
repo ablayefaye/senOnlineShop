@@ -42,11 +42,9 @@ INSTALLED_APPS = [
 
     # mes modules
     'database', # le modele
-    'manager', # espace administration
-    'login', # connexion de l'administrateur
+    'login', # connexion au site
     'welcome', # accueil du site
-    'articles',# pour les gestion des articles
-    'categories' # pour la gestion des categories
+    'administration',
 
 ]
 
@@ -58,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'e_commerce.urls'
@@ -114,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr-fr'
 
 TIME_ZONE = 'UTC'
 

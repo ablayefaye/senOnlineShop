@@ -1,0 +1,64 @@
+{% extends 'administration.html' %}
+
+{% block title %}
+    accueil administrateur
+{% endblock title %}
+
+
+{% block container %}
+<div class="container-fluid bg_users mt-5 pb-5">
+    <div class="container">
+        <h2 class="pt-5 pb-4 text-center font-italic text-white" style="font-size: 2.5em;text-shadow: 3px 2px 2px #fff;">Bienvenue dans espace administration de SenOnlineShop</h2>
+        <div class="row text-info">
+            <div class="col-sm-4">
+                <div class="jumbotron pb-1">
+                    <h4><i class="fa fa-users"></i> user</h4>
+                    <p class="lead">utilisateurs:  
+                    {% if users %}                        
+                    {{users|length}}
+                    {% else %}
+                    liste vide
+                    {% endif %}
+                    <hr class="my-4">
+                    <p class="text-center">
+                        <a href="{% url 'users' %}" class="btn btn-warning btn-sm">voir <i class="fa fa-plus"></i></a>
+                    </p>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="jumbotron pb-1">
+                    <h4><i class="fa fa-tools"></i> Articles</h4>
+                    <p class="lead">articles: 
+                    {% if articles %}
+                        {{articles|length}}
+                    {% endif %}
+                        </p>
+                    <hr class="my-4">
+                    <p class="text-center">
+                        <a href="" class="btn btn-warning btn-sm">voir <i class="fa fa-plus"></i></a>
+                    </p>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="jumbotron pb-1">
+                    <h4><i class="fa fa-tools"></i> Catégoris</h4>
+                    <p class="lead">catégoris: 
+                    {% if categories %}
+                        {{categories|length}}
+                    {% else %}
+                    liste vide
+                    {% endif %}
+                        </p>
+                    <hr class="my-4">
+                    <p class="text-center">
+                        <a href="" class="btn btn-warning btn-sm">voir <i class="fa fa-plus"></i></a>
+                    </p>
+                    <!-- {{admin.role}} -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock container %}
+    
+    

@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SenBoutique | {% block title %}{% endblock title %}
+    <title>SenOnlineShop | {% block title %}{% endblock title %}
     </title>
     <!-- insertion de css bootstrap -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
-    <!-- <link rel="stylesheet" href="{% static 'fonts/css/all.css' %}"> -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 
     <style>
         .shop {
@@ -45,9 +45,9 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-info">
-        <div class="container-fluid p-2">
-            <a class="navbar-brand" href="{% url 'welcome' %}"><strong>SenBoutique</strong></a>
+    <nav class="navbar navbar-expand-lg p-1 fixed-top navbar-dark bg-info">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'welcome' %}"><strong>SenOnlineShop</strong></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -66,12 +66,33 @@
 
                 <div class="navbar-nav ml-auto">
                     {% if user %}
-                    <a class="nav-link" href="{% url 'homeManager' %}">
+
+                    
+                    {% if user.role == True %}
+                        
+                    <a class="nav-link" href="" tn-default" data-toggle="modal"
+                    data-target="#disconnect">
+                        déconnexion
+                    </a>
+                    <a class="nav-link" href="{% url 'homeAdmin' %}">
                         <i class="fa fa-home"></i> Mon espace d'administration
                     </a>
+                    {% else %}
+                    <a class="nav-link" href="" tn-default" data-toggle="modal"
+                    data-target="#disconnect">
+                        déconnexion
+                    </a>
+                    <a class="nav-link" href="">
+                        <i class="fa fa-home"></i> Mon espace personnelle
+                    </a>
+                    {% endif %}
+                        
 
                     {% else %}
 
+                    <a class="nav-link" href="" data-toggle="modal" data-target="#login">
+                        s'inscrir
+                    </a>
                     <a class="nav-link" href="" data-toggle="modal" data-target="#login">
                         Se connecter
                     </a>
@@ -91,8 +112,8 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header bg-warning text-white">
-                        <h5 class="modal-title" id="exampleModalLabel"> 
-                           Authentification
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            Authentification
                         </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -105,7 +126,8 @@
                         </p>
                         <p>
                             <label for="password">Mot de passe:</label>
-                            <input type="password" name="password" placeholder="votre mot de passe *" class="form-control">
+                            <input type="password" name="password" placeholder="votre mot de passe *"
+                                class="form-control">
                         </p>
                     </div>
                     <div class="modal-footer">
@@ -116,8 +138,34 @@
             </div>
         </div>
     </form>
+
+    <!-- confimation déconnection utilisateur -->
+    <div class="modal fade" id="disconnect" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Déconnection ...
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûre de vouloir vous déconnecter ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Non,
+                        annuler</button>
+                    <a href="{% url 'disconnect' %}" class="btn btn-sm btn-danger">Oui, je
+                        suis sûre</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <footer class="p-3 bg-dark text-white mt-2 text-center">
-        SenBoutique
+        SenOnlineShop 
+        <a href="https://api.whatsapp.com/send?phone=221778545382"><i class="fa fa-whatsapp-square"></i></a>
     </footer>
     <!-- insertion de js bootstrap -->
     <script src="{% static 'js/jquery.js' %}"></script>

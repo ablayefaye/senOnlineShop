@@ -21,11 +21,9 @@ from welcome.views import welcome
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('manager/', include('manager.urls')), # administration du site
     path('login/', include('login.urls')), # authentification
     path('welcome/', include('welcome.urls')), # accueil site
-    path('articles/', include('articles.urls')), # gestion des articles
-    path('categories/', include('categories.urls')), # gestion des articles
+    path('administration/', include('administration.urls')), # accueil site
     path('', welcome, name='welcome')
 ]
 

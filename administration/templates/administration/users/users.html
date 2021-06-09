@@ -1,0 +1,403 @@
+{% extends 'administration.html' %}
+
+
+{% block title %}
+utilisateurs
+{% endblock title %}
+
+
+{% block container %}
+<div class="container-fluid bg_users mt-5 pt-3">
+    <div class="container pb-2">
+        <h2 class="font-italic text-white pt-2" style="text-shadow: 2px 1px 1px #fff;">Liste utilisateurs</h2>
+        <div class="jumbotron pt-2 pb-1">
+            <label class="text-info text-uppercase" style="font-size: 12px;">Saisir Mail utilisateur à chercher:
+            </label>
+            <form action="#" method="post">
+                {% csrf_token %}
+                <input type="email" name="lookUser" value="{{lookUser}}" class="form-control"
+                    placeholder="ton_mail@gmail.com *">
+            </form>
+        </div>
+        <hr>
+        <div class="text-right mb-2">
+            <!-- ajouter utilisateur -->
+            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addUser">
+                <i class="fa fa-plus"></i> utilisateur
+            </button>
+        </div>
+
+        {% if messages %}
+
+        {% for message in messages %}
+        <div class="alert alert-info">jjj</div>
+        {% endfor %}
+
+        {% endif %}
+
+        <!-- ajouter utilisateur -->
+        <form action="{% url 'addUser' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title" id="exampleModalLabel">Enregistrer utilisateur</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>
+                                <label for="firstname">Prénom:</label>
+                                <input required type="text" accept="image/*" name="firstname" id="firstname" class="form-control"
+                                    placeholder="votre prénom *">
+                            </p>
+                            <p>
+                                <label for="lastname">Nom:</label>
+                                <input required type="text" name="lastname" id="lastname" class="form-control"
+                                    placeholder="votre nom *">
+                            </p>
+                            <p>
+                                <label for="address">Adresse:</label>
+                                <input required type="text" name="address" id="address" class="form-control"
+                                    placeholder="adresse *">
+                            </p>
+                            <p>
+                                <label for="tel">Téléphone:</label>
+                                <input required type="number" name="tel" id="tel" class="form-control"
+                                    placeholder="Téléphone *">
+                            </p>
+                            <p>
+                                <label for="email">Mail:</label>
+                                <input required type="email" name="email" id="email" class="form-control"
+                                    placeholder="mail *">
+                            </p>
+                            <p>
+                                <label for="image">Photo profil:</label>
+                                <input required type="file"  name="image" id="image" class="form-control"
+                                    placeholder="mail *">
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-info">Enregistrer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+        {% if resultSearsh %}
+        <span class="text-info font-italic">{{resultSearsh}}</span> , <a href="{% url 'users' %}" class="btn btn-sm btn-info"> rafréchir liste</a><br> <br>
+        {% endif %}
+
+
+        {% if users %}
+
+        <!-- liste utilisateur -->
+        <div class="row">
+            {% for user in users %}
+            <div class="col-sm-4">
+                <div class="jumbotron pl-2 pt-2 pb-2">
+                    <h6 class="display-6 text-uppercase text-info font-italic">
+                        <img src="{{user.image.url}}" style="border-radius: 2em;" alt="" srcset="">
+                        <u><strong>#{{user.id}}</strong> {{user.firstname}} {{user.lastname}}</u>
+                    </h6>
+                    <p class="font-italic">
+                        <i class="fa fa-envelope text-info"></i> {{user.email}} <br>
+                        <i class="fa fa-map-marker text-info"></i> {{user.address}} <br>
+                        <i class="fa fa-phone-alt text-info"></i> {{user.tel}}
+                    </p>
+                    <hr class="my-4">
+                    <p class="text-center">
+                        <!-- modifier utilisateur -->
+                        <button type="button" class="btn btn-sm  btn-info" data-toggle="modal"
+                            data-target="#edit{{user.id}}">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <!-- supprimer utilisateur -->
+                        <button type="button" class="btn btn-sm  btn-danger" data-toggle="modal"
+                            data-target="#trash{{user.id}}">
+                            <i class="fa fa-archive"></i>
+                        </button>
+
+                        <!-- forfait utilisateur -->
+                        <button type="button" class="btn btn-sm  btn-default" data-toggle="modal"
+                            data-target="#forfaits{{user.id}}">
+                            <i class="fa fa-eye"></i> forfait
+                        </button>
+                        <!-- forfait utilisateur -->
+                        <button type="button" class="btn btn-sm  btn-default" data-toggle="modal"
+                            data-target="#articles{{user.id}}">
+                            <i class="fa fa-eye"></i> articles
+                        </button>
+                    </p>
+                </div>
+                <!-- modifier utilisateur -->
+                <form action="{% url 'editUser' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal fade" id="edit{{user.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-info text-white">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modifier utilisateur
+                                        <strong>#{{user.id}}</strong>
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" name="id" value="{{user.id}}">
+                                    <p>
+                                        <label for="firstname">Prénom:</label>
+                                        <input value='{{user.firstname}}' required type="text" name="firstname"
+                                            id="firstname" class="form-control" placeholder="votre prénom *">
+                                    </p>
+                                    <p>
+                                        <label for="lastname">Nom:</label>
+                                        <input value='{{user.lastname}}' required type="text" name="lastname"
+                                            id="lastname" class="form-control" placeholder="votre nom *">
+                                    </p>
+                                    <p>
+                                        <label for="address">Adresse:</label>
+                                        <input value='{{user.address}}' required type="text" name="address" id="address"
+                                            class="form-control" placeholder="adresse *">
+                                    </p>
+                                    <p>
+                                        <label for="tel">Téléphone:</label>
+                                        <input value='{{user.tel}}' required type="number" name="tel" id="tel"
+                                            class="form-control" placeholder="Téléphone *">
+                                    </p>
+                                    <p>
+                                        <label for="email">Mail:</label>
+                                        <input value='{{user.email}}' required type="email" name="email" id="email"
+                                            class="form-control" placeholder="mail *">
+                                    </p>
+                                    <p>
+                                        <label for="image">Photo profil:</label>
+                                        <input type="file" accept="image/*" name="image" id="image" class="form-control"
+                                            placeholder="mail *">
+                                    </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-dismiss="modal">Annuler</button>
+                                    <button type="submit" class="btn btn-info">Modifier</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- archiver utilisateur -->
+                <div class="modal fade" id="trash{{user.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-info text-white">
+                                <h5 class="modal-title" id="exampleModalLabel">Archivage utilisateur
+                                    <strong>#{{user.id}}</strong> {{user.firstname}} {{user.lastname}}
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Êtes-vous sûre de vouloir archiver cet utilisateur ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Non,
+                                    annuler</button>
+                                <a href="/administration/archiveUser/{{user.id}}/" class="btn btn-sm btn-danger">Oui, je
+                                    suis sûre</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- liste forfait utilisateur -->
+                <div class="modal fade" id="forfaits{{user.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-info text-white">
+                                <h5 class="modal-title" id="exampleModalLabel">Liste Forfaits <strong> de
+                                        {{user.firstname}} {{user.lastname}} #{{user.id}}</strong></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="p-1">
+                                    {% for forfait in forfaits %}
+
+                                    {% if forfait.user.id == user.id %}
+                                    <form action="{% url 'editForfaitA' %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="card p-1">
+                                            <div class="card-body p-1">
+                                                <h6 class="text-uppercase text-info font-italic">
+                                                    <strong>#{{forfait.id}}</strong> {{forfait.name}}
+                                                </h6>
+                                                <p>
+                                                    <strong class="text-success font-italic"
+                                                        style="font-size: 10;">forfait en cours ...</strong><br>
+                                                    Début forfait: <strong class="text-info">{{forfait.begin}}</strong>
+                                                    <br>
+                                                    Fin forfait: <strong class="text-info">{{forfait.end}}</strong> <br>
+
+                                                    {% if forfait.name.name != 'welcome' %}
+
+                                                    Modifier date fin forfait: <input required
+                                                        style="border: transparent; border-radius: 1em;"
+                                                        class="bg-light" type="date" name="end">
+                                                    <input type="hidden" name="idForfait" value="{{forfait.id}}">
+                                                    {% endif %}
+
+                                                </p>
+                                            </div>
+
+                                            {% if forfait.name.name != 'welcome' %}
+                                            <div class="card-footer text-right">
+                                                <button class="btn btn-info btn-sm" type="submit"><i
+                                                        class="fa fa-edit"></i></button>
+                                            </div>
+                                            {% endif %}
+
+
+                                        </div>
+                                    </form>
+                                    {% endif %}
+
+                                    {% endfor %}
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-secondary"
+                                    data-dismiss="modal">Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- liste articles utilisateur -->
+                <div class="modal fade" id="articles{{user.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header bg-info text-white">
+                                <h5 class="modal-title" id="exampleModalLabel">Liste articles postés par
+                                    <strong>#{{user.id}}</strong> {{user.firstname}} {{user.lastname}}
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+
+                                    {% for article in articles %}
+
+                                    {% if article.user.id == user.id %}
+                                    <div class="col-sm-6 mt-2">
+                                        <div class="card">
+                                            <div class="card-header p-1"><span
+                                                    class="Text-uppercase text-info">{{article.name}}, prix:
+                                                    {{article.price}} f{% if article.old_price %}, <strike
+                                                        class="text-danger">{{article.old_price}} f</strike>
+                                                    {% endif %}
+                                                </span></div>
+                                            <div class="card-body">
+                                                <img src="{{article.image.url}}" class="img-fluid"
+                                                    alt="{{article.name}}">
+                                            </div>
+                                            <div class="card-footer text-center p-1">
+                                                <i class="text-info">{{article.number_of_exemplaire}}
+                                                    exemplaire{{article.number_of_exemplaire|pluralize:'s'}}</i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+
+                                    {% endfor %}
+
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">
+                                    Fermer</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="jumbotron p-2">
+
+            {% if resultSearsh %}
+            pas de resultat pour cette adresse mail 
+            {% else %}
+            <h1>Liste utilisateurs vide!</h1>
+            {% endif %}
+
+        </div>
+        {% endif %}
+
+        <!--Pagination-->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if users.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ users.previous_page_number }}">&laquo;</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&laquo;</a>
+                </li>
+                {% endif %}
+                {% for i in users.paginator.page_range %}
+                {% if users.number == i %}
+                <li class="page-item active" aria-current="page">
+                    <span class="page-link">
+                        {{ i }}
+                        <span class="sr-only">(current)</span>
+                    </span>
+                </li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if users.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ users.next_page_number }}">&raquo;</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&raquo;</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        <!--end of Pagination-->
+
+        {% if users %}
+        <div class="alert alert-warning">
+            <strong> {{users|length}} utilisateur{{users|pluralize:'s'}} </strong>
+        </div>
+        {% endif %}
+
+    </div>
+    <br><br>
+</div>
+
+
+{% endblock container %}

@@ -1,3 +1,4 @@
+from typing import DefaultDict
 from django.shortcuts import redirect, render
 from database.models import User
 
@@ -20,10 +21,15 @@ def login(request):
                 user = User.objects.get(email=email, password=password)
                 request.session['email'] = email
                 request.session['role'] = user.role
-                print('ok')
-                return redirect('homeManager')
-                
+            
+                if user.role == True:
+                    return redirect('homeAdmin')
+                else:
+                    pass
             else:
                 return redirect('welcome')
 
-
+# deconnexion
+def disconnect(request):
+    request.session.clear()
+    return redirect('welcome')

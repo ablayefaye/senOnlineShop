@@ -1,9 +1,12 @@
 from django.db import models
+from django.db.models.base import Model
 from django_resized import ResizedImageField
 
 # _______________ mes modéles _______________
 
-
+# type de forfait
+def typeForfaits():
+    return tuple(TypeForfait.objects.all())
 
 # Modéle User => qui va avoir un role admin (True) ou utilsateur simple (False)
 class User(models.Model):
@@ -12,9 +15,10 @@ class User(models.Model):
     address = models.CharField(max_length=255) # adresse
     tel = models.CharField(max_length=255) # téléphone
     email = models.CharField(max_length=255, unique=True) # mail
-    password = models.CharField(max_length=255) # mot de passe
+    password = models.CharField(max_length=255, default='password') # mot de passe
     role = models.BooleanField(default=False) # role: True => admin ou False => simple utilisateur
     image = ResizedImageField(size=[60, 50], upload_to='profils')
+    trash = models.BooleanField(default=False)
 
     def __str__(self):
         return self.firstname+ ' ' +self.lastname
@@ -41,6 +45,25 @@ class Article(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE) # utilisateur créateur
     category = models.ForeignKey(Category, on_delete=models.CASCADE) # catégori de l'article
     image = ResizedImageField(size=[500, 300], upload_to='images')
+    signal = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
+
+# type de forfait
+class TypeForfait(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+    
+
+# forfait utilisateur
+class Forfait(models.Model):
+    name = models.OneToOneField(TypeForfait, on_delete=models.CASCADE)
+    begin = models.DateField(auto_now=True)
+    end = models.DateField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name.name
