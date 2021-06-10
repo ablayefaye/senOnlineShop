@@ -1,0 +1,268 @@
+{% extends 'administration.html' %}
+
+
+{% block title %}
+articles
+{% endblock title %}
+
+
+{% block container %}
+<div class="container-fluid bg_admin mt-5 pt-3">
+    <div class="container">
+        <h2 class="font-italic text-white pt-2" style="text-shadow: 2px 1px 1px #fff;">Liste articles</h2>
+        <div class="jumbotron pt-2 pb-1">
+            <label class="text-info text-uppercase" style="font-size: 12px;">Saisir nom article à chercher:
+            </label>
+            <form action="#" method="post">
+                {% csrf_token %}
+                <input type="email" name="lookUser" value="{{lookUser}}" class="form-control"
+                    placeholder="nom article svp; ex: chemise *">
+            </form>
+        </div>
+        <hr>
+        <div class="text-right mb-2">
+            <!-- ajouter article -->
+            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addArticle">
+                <i class="fa fa-plus"></i> articles
+            </button>
+        </div>
+        <!--Pagination-->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if articles.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ articles.previous_page_number }}">&laquo;</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&laquo;</a>
+                </li>
+                {% endif %}
+                {% for i in articles.paginator.page_range %}
+                {% if articles.number == i %}
+                <li class="page-item active" aria-current="page">
+                    <span class="page-link">
+                        {{ i }}
+                        <span class="sr-only">(current)</span>
+                    </span>
+                </li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if articles.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ articles.next_page_number }}">&raquo;</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&raquo;</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        <!--end of Pagination-->
+
+        <!-- message -->
+        {% if messages %}
+
+        {% for message in messages %}
+        <div class="alert alert-info">{{message}}</div>
+        {% endfor %}
+
+        {% endif %}
+
+
+        <!-- ajouter article -->
+        <form action="{% url 'addArticle' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal fade" id="addArticle" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title" id="exampleModalLabel">Enregistrer article</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>
+                                <label for="name">Nom article:</label>
+                                <input required type="text" accept="image/*" name="name" id="name" class="form-control"
+                                    placeholder="Le nom de l'article *">
+                            </p>
+                            <p>
+                                <label for="price">Prix article:</label>
+                                <input required type="text" name="price" id="price" class="form-control"
+                                    placeholder="Le prix de l'article *">
+                            </p>
+                            <p>
+                                <label for="old_price">Ancien prix:</label>
+                                <input type="text" name="old_price" id="old_price" class="form-control"
+                                    placeholder="l'ancien prix de l'article">
+                            </p>
+                            <p>
+                                <label for="number_of_exemplaire">Nombre exemplaires:</label>
+                                <input required type="number" name="number_of_exemplaire" id="number_of_exemplaire"
+                                    class="form-control" placeholder="Nombre exemplaires *">
+                            </p>
+                            <p>
+                                <label for="description">Description:</label>
+                                <input type="text" name="description" id="number_of_exemplaire" class="form-control"
+                                    placeholder="La description de l'article ">
+                            </p>
+                            <p>
+                                <select required class="form-control" name="category" id="categories">
+                                    <option value="">--Veuiller selectionner un catégori svp--</option>
+                                    {% for cat in categories %}
+                                        <option value="{{cat.id}}">{{cat.name}}</option>
+                                    {% endfor %}
+                                        
+                                </select>
+                            </p>
+                            <p>
+                                <label for="image">Image article:</label>
+                                <input required type="file" accept="image/*" name="image" id="image"
+                                    class="form-control">
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-info">Enregistrer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        {% if articles %}
+        <div class="row">
+
+            {% for article in articles %}
+            <div class="col-sm-4">
+                <div class="jumbotron pl-2 pt-2 pb-2">
+                    <h6 class="display-6 text-uppercase text-info font-italic">
+                        <img src="{{user.image.url}}" style="border-radius: 2em;" alt="" srcset="">
+                        <u><strong>#{{article.id}}</strong> {{article.name}}</u>
+                    </h6>
+                    <p class="text-center">
+                        <img src="{{article.image.url}}" class="img-fluid" alt="" srcset="">
+                    </p>
+                    <hr>
+                    <p class="text-center">
+                        <span class="text-info">prix: {{article.price}} F
+                            {% if article.old_price %}
+                            , <strike class="text-danger">{{article.old_price}} F</strike>
+                            {% endif %}
+                        </span> <br>
+                        <!-- voir article -->
+                        <button class="btn btn-warning btn-sm" btn-default" data-toggle="modal"
+                            data-target="#show{{article.id}}"><i class="fa fa-eye"></i></button>
+                    </p>
+                </div>
+            </div>
+            <!-- voir article -->
+            <div class="modal fade" id="show{{article.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title" id="exampleModalLabel">
+                                <strong>#{{article.id}}</strong> {{article.name}}, posté le {{article.created_at}}
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="text-center"><img src="{{article.image.url}}" class="img-fluid" alt="" srcset=""></p>
+                            <hr>
+                            <p>
+                                <u class="font-italic">Prix</u>: <span class="text-info">{{article.price}} F</span> <br>
+
+                                {% if article.old_price %}
+                                <u class="font-italic">Ancien prix:</u> <strike
+                                    class="text-danger">{{article.old_price}}</strike> F
+                                    <br>
+                                {% endif %}
+
+                                {% if article.description %}
+                            <div class="border p-1">
+                                <u class="font-italic">Description article:</u> <br>
+                                <span class="text-info">{{article.description}}</span>
+                            </div>
+                            {% endif %}
+                            
+                            <u class="font-italic">Nombre exemplaires:</u> <span
+                                class="text-info">{{article.number_of_exemplaire}}
+                                exemplaire{{article.number_of_exemplaire|pluralize:'s'}}</span>
+                            </p>
+                            
+                            {% if article.signal %}
+                                <span class="text-danger">article signalé</span>
+                                
+                            {% endif %}
+                                
+                        </div>
+                        <div class="modal-footer">
+
+                            <button type="button" class="btn btn-sm btn-secondary"
+                                data-dismiss="modal">Fermer</i></button>
+                            <a href="" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
+                            <a href="" class="btn btn-sm btn-default"><i class="fa fa-edit"></i></a>
+                            
+                            {% if article.signal %}
+                            <a href="" class="btn btn-sm btn-success">enlever signalement</a>
+                            {% endif %}
+                                
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <!--Pagination-->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if articles.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ articles.previous_page_number }}">&laquo;</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&laquo;</a>
+                </li>
+                {% endif %}
+                {% for i in articles.paginator.page_range %}
+                {% if articles.number == i %}
+                <li class="page-item active" aria-current="page">
+                    <span class="page-link">
+                        {{ i }}
+                        <span class="sr-only">(current)</span>
+                    </span>
+                </li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if articles.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ articles.next_page_number }}">&raquo;</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&raquo;</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        <!--end of Pagination-->
+        <div class="alert alert-warning">
+            <strong> {{articles|length}} article{{articles|pluralize:'s'}} </strong>
+        </div>
+        <br><br>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock container %}

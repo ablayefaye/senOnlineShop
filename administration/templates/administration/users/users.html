@@ -7,7 +7,7 @@ utilisateurs
 
 
 {% block container %}
-<div class="container-fluid bg_users mt-5 pt-3">
+<div class="container-fluid bg_admin mt-5 pt-3">
     <div class="container pb-2">
         <h2 class="font-italic text-white pt-2" style="text-shadow: 2px 1px 1px #fff;">Liste utilisateurs</h2>
         <div class="jumbotron pt-2 pb-1">
@@ -30,11 +30,46 @@ utilisateurs
         {% if messages %}
 
         {% for message in messages %}
-        <div class="alert alert-info">jjj</div>
+        <div class="alert alert-info">{{message}}</div>
         {% endfor %}
 
         {% endif %}
-
+        <!--Pagination-->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if users.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ users.previous_page_number }}">&laquo;</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&laquo;</a>
+                </li>
+                {% endif %}
+                {% for i in users.paginator.page_range %}
+                {% if users.number == i %}
+                <li class="page-item active" aria-current="page">
+                    <span class="page-link">
+                        {{ i }}
+                        <span class="sr-only">(current)</span>
+                    </span>
+                </li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if users.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ users.next_page_number }}">&raquo;</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&raquo;</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        <!--end of Pagination-->
         <!-- ajouter utilisateur -->
         <form action="{% url 'addUser' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -50,8 +85,8 @@ utilisateurs
                         <div class="modal-body">
                             <p>
                                 <label for="firstname">Prénom:</label>
-                                <input required type="text" accept="image/*" name="firstname" id="firstname" class="form-control"
-                                    placeholder="votre prénom *">
+                                <input required type="text" accept="image/*" name="firstname" id="firstname"
+                                    class="form-control" placeholder="votre prénom *">
                             </p>
                             <p>
                                 <label for="lastname">Nom:</label>
@@ -75,9 +110,8 @@ utilisateurs
                             </p>
                             <p>
                                 <label for="image">Photo profil:</label>
-                                <input required type="file"  name="image" id="image" class="form-control"
-                                    placeholder="mail *">
-                            </p>
+                                <input required type="file" accept="image/*" name="image" id="image"
+                                    class="form-control" </p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
@@ -90,7 +124,8 @@ utilisateurs
 
 
         {% if resultSearsh %}
-        <span class="text-info font-italic">{{resultSearsh}}</span> , <a href="{% url 'users' %}" class="btn btn-sm btn-info"> rafréchir liste</a><br> <br>
+        <span class="text-info font-italic">{{resultSearsh}}</span> , <a href="{% url 'users' %}"
+            class="btn btn-sm btn-info"> rafréchir liste</a><br> <br>
         {% endif %}
 
 
@@ -344,7 +379,7 @@ utilisateurs
         <div class="jumbotron p-2">
 
             {% if resultSearsh %}
-            pas de resultat pour cette adresse mail 
+            pas de resultat pour cette adresse mail
             {% else %}
             <h1>Liste utilisateurs vide!</h1>
             {% endif %}

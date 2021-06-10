@@ -9,7 +9,8 @@
     </title>
     <!-- insertion de css bootstrap -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
 
     <style>
         .shop {
@@ -41,6 +42,21 @@
             background-size: cover;
             /* Resize the background image to cover the entire container */
         }
+
+        .contact {
+            background-image: url("/static/images/contact.jpg");
+            /* The image used */
+            background-color: #cccccc;
+            /* Used if the image is unavailable */
+            height: auto;
+            /* You must set a specified height */
+            background-position: center;
+            /* Center the image */
+            background-repeat: no-repeat;
+            /* Do not repeat the image */
+            background-size: cover;
+            /* Resize the background image to cover the entire container */
+        }
     </style>
 </head>
 
@@ -59,34 +75,39 @@
                         active
                     {% endif %}
                     " aria-current="page" href="{% url 'welcome_articles' %}">nos articles</a>
-                    <a class="nav-link                  
-                    " aria-current="page" href="" >contact</a>
-                    <a class="nav-link" aria-current="page" href="">à propos</a>
+                    
+                    {% if page != 'welcome' %}
+                        <a class="nav-link" aria-current="page" href="/#contact">contact</a>
+                        <a class="nav-link" aria-current="page" href="/#about">à propos</a>
+                    {% else %}
+                        <a class="nav-link" aria-current="page" href="#contact">contact</a>
+                        <a class="nav-link" aria-current="page" href="#about">à propos</a>
+                    {% endif %}
+                        
+                    
                 </div>
 
                 <div class="navbar-nav ml-auto">
                     {% if user %}
 
-                    
+
                     {% if user.role == True %}
-                        
-                    <a class="nav-link" href="" tn-default" data-toggle="modal"
-                    data-target="#disconnect">
+
+                    <a class="nav-link" href="" tn-default" data-toggle="modal" data-target="#disconnect">
                         déconnexion
                     </a>
                     <a class="nav-link" href="{% url 'homeAdmin' %}">
                         <i class="fa fa-home"></i> Mon espace d'administration
                     </a>
                     {% else %}
-                    <a class="nav-link" href="" tn-default" data-toggle="modal"
-                    data-target="#disconnect">
+                    <a class="nav-link" href="" tn-default" data-toggle="modal" data-target="#disconnect">
                         déconnexion
                     </a>
                     <a class="nav-link" href="">
                         <i class="fa fa-home"></i> Mon espace personnelle
                     </a>
                     {% endif %}
-                        
+
 
                     {% else %}
 
@@ -104,7 +125,7 @@
         </div>
     </nav>
     {% block container %}
-
+    
     {% endblock container %}
     <form action="{% url 'login' %}" method="post">
         {% csrf_token %}
@@ -164,13 +185,50 @@
         </div>
     </div>
     <footer class="p-3 bg-dark text-white mt-2 text-center">
-        SenOnlineShop 
-        <a href="https://api.whatsapp.com/send?phone=221778545382"><i class="fa fa-whatsapp-square"></i></a>
+        SenOnlineShop
+        <hr class="bg-white" style="height: 0.1em;">
+        <div class="row">
+            <div class="col-sm-4 border p-3">
+                <h6 class="text-uppercase">Réseau sociaux</h6>
+                <a href="https://api.whatsapp.com/send?phone=221778545382"><img class="img-fluid"
+                        style="width: 3em; height: 3em;" src="{% static 'images/whatsapp.png' %}" alt="" srcset=""></a>
+                <a href="https://api.whatsapp.com/send?phone=221778545382"><img class="img-fluid"
+                        style="width: 3em; height: 3em;" src="{% static 'images/twitter.png' %}" alt="" srcset=""></a>
+                <a href="https://api.whatsapp.com/send?phone=221778545382"><img class="img-fluid"
+                        style="width: 3em; height: 3em;" src="{% static 'images/facebook.png' %}" alt="" srcset=""></a>
+                <a href="https://api.whatsapp.com/send?phone=221778545382"><img class="img-fluid"
+                        style="width: 3em; height: 3em;" src="{% static 'images/instagram.png' %}" alt="" srcset=""></a>
+            </div>
+            <div class="col-sm-4 border p-3">
+                <h6 class="text-uppercase">nos partenaires</h6>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde fugiat itaque odit laboriosam
+                reprehenderit a laborum repellat distinctio illo architecto! Voluptate optio dolore numquam placeat nam
+                ad officia quos fugit!
+            </div>
+            <div class="col-sm-4 border p-3">
+                <h6 class="text-uppercase">autres</h6>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil voluptatibus fugiat dolorum nesciunt
+                molestiae assumenda sint, dolor tempora, blanditiis mollitia nostrum, dicta soluta eum quos eius nemo
+                distinctio sit aspernatur!
+            </div>
+        </div>
     </footer>
     <!-- insertion de js bootstrap -->
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'js/bootstrap.js' %}"></script>
-    <!-- <script src="{% static 'fonts/js/all.js' %}"></script> -->
+    <script type="text/javascript">
+        $('a[href^="#"]').click(function () {
+            var the_id = $(this).attr("href");
+            if (the_id === '#') {
+                return;
+            }
+            $('html, body').animate({
+                scrollTop: $(the_id).offset().top
+            }, 5000);
+            return false;
+        });
+
+    </script>
 </body>
 
 </html>

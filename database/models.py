@@ -46,6 +46,8 @@ class Article(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE) # catégori de l'article
     image = ResizedImageField(size=[500, 300], upload_to='images')
     signal = models.BooleanField(default=False)
+    created_at = models.DateField(auto_now=True)
+    updated_at = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.name

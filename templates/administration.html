@@ -28,7 +28,7 @@
         background-size: cover; /* Resize the background image to cover the entire container */
         } 
 
-        .bg_users{
+        .bg_admin{
             background-image: url("/static/images/users.jpg"); /* The image used */
         background-color: #cccccc; /* Used if the image is unavailable */
         height: auto; /* You must set a specified height */
@@ -58,7 +58,13 @@
                     " href="{% url 'users' %}"> <i class="fa fa-tools"></i> utilisateurs</a>
                 </li> 
                 <li class="nav-item">
-                    <a class="nav-link" href=""><i class="fa fa-tools"></i> articles</a>
+                    <a class="nav-link
+                    
+                    {% if page == 'articles' %}
+                        active
+                    {% endif %}
+                        
+                    " href="{% url 'articles' %}"><i class="fa fa-tools"></i> articles</a>
                 </li>     
                 <li class="nav-item">
                     <a class="nav-link" href=""> <i class="fa fa-tools"></i> catégoris</a>
@@ -69,7 +75,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href=""><i class="fa fa-tools"></i> signalements 
                     {% if signalements %}
-                        <span class="bage bg-info p-1" style="border-radius: 2em;">{{signalements|length}}</span>
+                        <span class="bage pl-2 pr-2 pt-1 text-lowercase bg-info" style="border-radius: 2em;">{{signalements|length}}</span>
                     {% endif %}
                     </a>
                 </li> 

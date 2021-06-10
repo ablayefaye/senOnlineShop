@@ -16,7 +16,8 @@ def welcome(request):
 
     context = {
          'user': user,
-         'articles': articles
+         'articles': articles,
+         'page': 'welcome'
     }
     return render(request,'welcome/welcome.html', context)
 

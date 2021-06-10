@@ -6,7 +6,7 @@
 
 
 {% block container %}
-<div class="container-fluid bg_users mt-5 pb-5">
+<div class="container-fluid bg_admin mt-5 pb-5">
     <div class="container">
         <h2 class="pt-5 pb-4 text-center font-italic text-white" style="font-size: 2.5em;text-shadow: 3px 2px 2px #fff;">Bienvenue dans espace administration de SenOnlineShop</h2>
         <div class="row text-info">
@@ -54,6 +54,93 @@
                         <a href="" class="btn btn-warning btn-sm">voir <i class="fa fa-plus"></i></a>
                     </p>
                     <!-- {{admin.role}} -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container text-center">
+        <hr class="bg-white mt-5" style="height: 0.2em;">
+        <h2 class="font-italic text-white text-center pt-2" style="text-shadow: 2px 1px 1px #fff;">Nos articles</h2>
+        <div class="row">
+            <div class="col-sm-4 offset-sm-4">
+    
+                <div id="demo" class="carousel slide" data-ride="carousel">
+    
+                    <!-- Indicators -->
+                    <ul class="carousel-indicators">
+    
+                        {% for car in cars %}
+    
+                        {% if forloop.counter == 1 %}
+                        <li data-target="#demo" data-slide-to="{{forloop.counter}}" class="active"></li>
+                        {% else %}
+                        <li data-target="#demo" data-slide-to="{{forloop.counter}}"></li>
+                        {% endif %}
+    
+                        {% endfor %}
+    
+                    </ul>
+    
+                    <!-- The slideshow -->
+                    <div class="carousel-inner">
+    
+                        
+                        {% if articles %}
+                            
+                        {% for article in articles %}
+    
+                        {% if forloop.counter == 1 %}
+                        <div class="carousel-item active">
+                            <img src="{{article.image.url}}" class="img-fluid img-thumbnail" alt="Los ">
+                            <div class="carousel-caption">
+                                <div class="text-center">
+                                    <button class="btn btn-sm btn-warning">{{article.name | truncatechars:15}}</button>
+                                    <br>
+                                    <br>
+                                    <button class="btn btn-sm btn-warning">prix {{article.price}} Francs</button>                                
+                                    <br>
+                                    <br>
+                                    <button class="btn btn-sm btn-warning">Tél {{article.user.tel}}</button>                                
+                                </div>
+    
+                            </div>
+    
+                        </div>
+                        {% else %}
+                        <div class="carousel-item">
+                            <img src="{{article.image.url}}" class="img-fluid img-thumbnail" alt="Los ">
+                            <div class="carousel-caption">
+                                <div class="text-center">
+                                    <button class="btn btn-sm btn-warning">{{article.name | truncatechars:15}}</button>
+                                    <br>
+                                    <br>
+                                    <button class="btn btn-sm btn-warning">prix {{article.price}} Francs</button>  
+                                    <br>
+                                    <br>
+                                    <button class="btn btn-sm btn-warning">Tél {{article.user.tel}}</button>                                
+                                  
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+    
+                        {% endfor %}
+                        {% endif %}
+                            
+    
+    
+                    </div>
+    
+                    <!-- Left and right controls -->
+                    <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </a>
+                    <a class="carousel-control-next" href="#demo" data-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </a>
+    
                 </div>
             </div>
         </div>
